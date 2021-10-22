@@ -1,0 +1,3 @@
+/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/rebuild_cache.dir
+/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/edit_cache.dir
+/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir
