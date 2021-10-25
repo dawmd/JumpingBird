@@ -153,6 +153,33 @@ Bird.cpp.s:
 	$(MAKE) -f CMakeFiles/JumpingBird.dir/build.make CMakeFiles/JumpingBird.dir/Bird.cpp.s
 .PHONY : Bird.cpp.s
 
+Game.o: Game.cpp.o
+
+.PHONY : Game.o
+
+# target to build an object file
+Game.cpp.o:
+	$(MAKE) -f CMakeFiles/JumpingBird.dir/build.make CMakeFiles/JumpingBird.dir/Game.cpp.o
+.PHONY : Game.cpp.o
+
+Game.i: Game.cpp.i
+
+.PHONY : Game.i
+
+# target to preprocess a source file
+Game.cpp.i:
+	$(MAKE) -f CMakeFiles/JumpingBird.dir/build.make CMakeFiles/JumpingBird.dir/Game.cpp.i
+.PHONY : Game.cpp.i
+
+Game.s: Game.cpp.s
+
+.PHONY : Game.s
+
+# target to generate assembly for a file
+Game.cpp.s:
+	$(MAKE) -f CMakeFiles/JumpingBird.dir/build.make CMakeFiles/JumpingBird.dir/Game.cpp.s
+.PHONY : Game.cpp.s
+
 Matrix4f.o: Matrix4f.cpp.o
 
 .PHONY : Matrix4f.o
@@ -300,6 +327,9 @@ help:
 	@echo "... Bird.o"
 	@echo "... Bird.i"
 	@echo "... Bird.s"
+	@echo "... Game.o"
+	@echo "... Game.i"
+	@echo "... Game.s"
 	@echo "... Matrix4f.o"
 	@echo "... Matrix4f.i"
 	@echo "... Matrix4f.s"

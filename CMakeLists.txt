@@ -38,7 +38,7 @@ set(CMAKE_CXX_FLAGS "-DGLEW_NO_GLU -Wall -Wextra -O3")
 
 
 # add the executable
-add_executable(JumpingBird main.cpp Window.cpp Matrix4f.cpp Rectangle.cpp Bird.cpp Shader.cpp)
+add_executable(JumpingBird main.cpp Window.cpp Matrix4f.cpp Rectangle.cpp Bird.cpp Shader.cpp Game.cpp)
 
 
 # linking the libraries

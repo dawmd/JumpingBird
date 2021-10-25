@@ -14,6 +14,24 @@ Shader.h
 Matrix4f.h
 /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
 
+/home/dawid/Documents/projects/JumpingBird2/Game.cpp
+Game.h
+/home/dawid/Documents/projects/JumpingBird2/Game.h
+Rectangle.h
+/home/dawid/Documents/projects/JumpingBird2/Rectangle.h
+GL/glew.h
+-
+iostream
+-
+
+/home/dawid/Documents/projects/JumpingBird2/Game.h
+Window.h
+/home/dawid/Documents/projects/JumpingBird2/Window.h
+Bird.h
+/home/dawid/Documents/projects/JumpingBird2/Bird.h
+optional
+-
+
 /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
 
 /home/dawid/Documents/projects/JumpingBird2/Rectangle.h
@@ -30,12 +48,6 @@ string
 unordered_map
 -
 
-/home/dawid/Documents/projects/JumpingBird2/Window.cpp
-Window.h
-/home/dawid/Documents/projects/JumpingBird2/Window.h
-iostream
--
-
 /home/dawid/Documents/projects/JumpingBird2/Window.h
 GL/glew.h
 -
@@ -44,15 +56,5 @@ GLFW/glfw3.h
 string
 -
 functional
--
-
-/home/dawid/Documents/projects/JumpingBird2/main.cpp
-Window.h
-/home/dawid/Documents/projects/JumpingBird2/Window.h
-Rectangle.h
-/home/dawid/Documents/projects/JumpingBird2/Rectangle.h
-Bird.h
-/home/dawid/Documents/projects/JumpingBird2/Bird.h
-iostream
 -
 

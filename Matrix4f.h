@@ -35,7 +35,7 @@ class Matrix4f {
         void operator*=(const Matrix4f& other_matrix);
 
         /** Returns a pointer to the array of floats the matrix consists of */
-        operator float *();
+        operator const float *();
 
         /** Modifies the matrix so that it's an identity matrix */
         void set_to_identity();

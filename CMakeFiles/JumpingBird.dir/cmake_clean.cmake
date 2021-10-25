@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/JumpingBird.dir/Bird.cpp.o"
+  "CMakeFiles/JumpingBird.dir/Game.cpp.o"
   "CMakeFiles/JumpingBird.dir/Matrix4f.cpp.o"
   "CMakeFiles/JumpingBird.dir/Rectangle.cpp.o"
   "CMakeFiles/JumpingBird.dir/Shader.cpp.o"

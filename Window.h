@@ -27,7 +27,8 @@ class Window {
         }
         static void perform_while_open(const std::function<void()> &function);
         static inline bool open() {
-            return glfwWindowShouldClose(window);
+            return !glfwWindowShouldClose(window);
         }
         static void clean_up();
+        static bool is_key_pressed(const char key);
 };

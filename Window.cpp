@@ -51,6 +51,7 @@ void Window::init(const std::string &title, uint16_t height, uint16_t width, boo
 
 void Window::remove() {
     glfwTerminate();
+    window = nullptr;
 }
 
 void Window::clean_up() {
@@ -65,6 +66,14 @@ void Window::perform_while_open(const std::function<void()> &function) {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+}
+
+bool Window::is_key_pressed(const char key) {
+    if (!window) {
+        std::cerr << "Window is not initilised." << std::endl;
+        return false;
+    }
+    return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
 GLFWwindow *Window::window = nullptr;

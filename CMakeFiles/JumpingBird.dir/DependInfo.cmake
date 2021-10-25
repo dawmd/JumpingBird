@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/dawid/Documents/projects/JumpingBird2/Bird.cpp" "/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir/Bird.cpp.o"
+  "/home/dawid/Documents/projects/JumpingBird2/Game.cpp" "/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir/Game.cpp.o"
   "/home/dawid/Documents/projects/JumpingBird2/Matrix4f.cpp" "/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir/Matrix4f.cpp.o"
   "/home/dawid/Documents/projects/JumpingBird2/Rectangle.cpp" "/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir/Rectangle.cpp.o"
   "/home/dawid/Documents/projects/JumpingBird2/Shader.cpp" "/home/dawid/Documents/projects/JumpingBird2/CMakeFiles/JumpingBird.dir/Shader.cpp.o"

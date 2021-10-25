@@ -65,8 +65,10 @@ void Matrix4f::operator*=(const Matrix4f &other_matrix) {
     }
 }
 
-Matrix4f::operator float *() {
-    return &elements[0];
+
+
+Matrix4f::operator const float *() {
+    return reinterpret_cast<const float *>(&elements[0]);
 }
 
 void Matrix4f::set_to_identity() {

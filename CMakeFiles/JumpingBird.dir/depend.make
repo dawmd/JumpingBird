@@ -7,6 +7,14 @@ CMakeFiles/JumpingBird.dir/Bird.cpp.o: Matrix4f.h
 CMakeFiles/JumpingBird.dir/Bird.cpp.o: Rectangle.h
 CMakeFiles/JumpingBird.dir/Bird.cpp.o: Shader.h
 
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Bird.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Game.cpp
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Game.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Matrix4f.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Rectangle.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Shader.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o: Window.h
+
 CMakeFiles/JumpingBird.dir/Matrix4f.cpp.o: Matrix4f.cpp
 CMakeFiles/JumpingBird.dir/Matrix4f.cpp.o: Matrix4f.h
 
@@ -21,6 +29,7 @@ CMakeFiles/JumpingBird.dir/Window.cpp.o: Window.cpp
 CMakeFiles/JumpingBird.dir/Window.cpp.o: Window.h
 
 CMakeFiles/JumpingBird.dir/main.cpp.o: Bird.h
+CMakeFiles/JumpingBird.dir/main.cpp.o: Game.h
 CMakeFiles/JumpingBird.dir/main.cpp.o: Matrix4f.h
 CMakeFiles/JumpingBird.dir/main.cpp.o: Rectangle.h
 CMakeFiles/JumpingBird.dir/main.cpp.o: Shader.h

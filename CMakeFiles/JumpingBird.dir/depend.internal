@@ -7,6 +7,14 @@ CMakeFiles/JumpingBird.dir/Bird.cpp.o
  /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
  /home/dawid/Documents/projects/JumpingBird2/Rectangle.h
  /home/dawid/Documents/projects/JumpingBird2/Shader.h
+CMakeFiles/JumpingBird.dir/Game.cpp.o
+ /home/dawid/Documents/projects/JumpingBird2/Bird.h
+ /home/dawid/Documents/projects/JumpingBird2/Game.cpp
+ /home/dawid/Documents/projects/JumpingBird2/Game.h
+ /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
+ /home/dawid/Documents/projects/JumpingBird2/Rectangle.h
+ /home/dawid/Documents/projects/JumpingBird2/Shader.h
+ /home/dawid/Documents/projects/JumpingBird2/Window.h
 CMakeFiles/JumpingBird.dir/Matrix4f.cpp.o
  /home/dawid/Documents/projects/JumpingBird2/Matrix4f.cpp
  /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
@@ -22,6 +30,7 @@ CMakeFiles/JumpingBird.dir/Window.cpp.o
  /home/dawid/Documents/projects/JumpingBird2/Window.h
 CMakeFiles/JumpingBird.dir/main.cpp.o
  /home/dawid/Documents/projects/JumpingBird2/Bird.h
+ /home/dawid/Documents/projects/JumpingBird2/Game.h
  /home/dawid/Documents/projects/JumpingBird2/Matrix4f.h
  /home/dawid/Documents/projects/JumpingBird2/Rectangle.h
  /home/dawid/Documents/projects/JumpingBird2/Shader.h
