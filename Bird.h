@@ -9,6 +9,7 @@ class Bird : public Rectangle {
         Shader shader;
     public:
         Bird(const GLfloat *init_position_, const float init_angle);
+        ~Bird() = default;
         
         void rotate(const float d_angle);
         void use_shader();

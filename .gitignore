@@ -1,5 +1,5 @@
+*
 !*.cpp
 !*.h
-!README.md
-!CMakeLists.txt
 !.gitignore
+!.CMakeLists.txt

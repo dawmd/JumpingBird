@@ -71,7 +71,7 @@
 #include "Game.h"
 
 int main() {
-    Game::init(1800, 800);
+    Game::init();
     while (Game::is_ongoing()) {
         Game::update();
         Game::draw();
