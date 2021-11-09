@@ -1,7 +1,10 @@
 #include "Matrix4f.h"
 
-// For std::swap
-#include <algorithm>
+static inline void float_swap(float &f1, float &f2) {
+    float tmp = f1;
+    f1 = f2;
+    f2 = tmp;
+}
 
 Matrix4f::Matrix4f() {
     for (int i = 0; i < 4 * 4; ++i) {
@@ -18,7 +21,7 @@ Matrix4f::Matrix4f(const Matrix4f &other_matrix) {
 void Matrix4f::transpose() {
     for (int i = 0; i < 4; ++i) {
         for (int j = i + 1; j < 4; ++j) {
-            std::swap(elements[4 * i + j], elements[4 * j + i]);
+            float_swap(elements[4 * i + j], elements[4 * j + i]);
         }
     }
 }

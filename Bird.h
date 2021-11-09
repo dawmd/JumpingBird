@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Rectangle.h"
 #include "Shader.h"
 #include "Matrix4f.h"
