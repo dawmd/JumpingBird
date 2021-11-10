@@ -34,7 +34,7 @@ void Bird::rotate(const float d_angle) {
 }
 
 void Bird::use_shader() {
-    // shader.bind();
+    shader.bind();
     shader.set_uniform("movement", 1, UniformDataType::MAT_4F, static_cast<const float *>(position));
     shader.set_uniform("projMatr", 1, UniformDataType::MAT_4F, static_cast<const float *>(Rectangle::projection_matrix));
     shader.set_uniform("rotMatr", 1, UniformDataType::MAT_4F, static_cast<const float *>(rotation_matrix));

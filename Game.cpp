@@ -41,13 +41,14 @@ namespace Game {
         std::vector<char> jumping_keys;
 
         uint8_t pipe_pairs_number;
+        float pipe_speed;
     } GAME_PARAMETERS;
 
 
     struct PipePair {
+        float center_point_height;
         Pipe upper_pipe;
         Pipe lower_pipe;
-        float center_point_height;
 
         PipePair(float center_point_height_, GLfloat *positions, float pipe_hole_size)
             : center_point_height(center_point_height_)
@@ -98,6 +99,7 @@ namespace Game {
         GAME_PARAMETERS.jumping_keys = { 'W', ' ' };
 
         GAME_PARAMETERS.pipe_pairs_number = /* computing based on the window's size */ 1;
+        GAME_PARAMETERS.pipe_speed        = -5.0f;
     }
 
     
@@ -131,6 +133,10 @@ namespace Game {
     }
 
     void update() {
+        for (auto &pipe_pair : pipe_pairs) {
+            pipe_pair->update(GAME_PARAMETERS.pipe_speed, 0.0f, 0.0f);
+        }
+
         bool jump = false;
 
         for (char key : GAME_PARAMETERS.jumping_keys) {
