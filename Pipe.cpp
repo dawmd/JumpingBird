@@ -1,9 +1,14 @@
 #include "Pipe.h"
 
+// to be removed
+#include <iostream>
+
 Pipe::Pipe(const GLfloat *init_position_)
     : Rectangle(init_position_)
-    , shader("./pipeVertexShader.shader", "./pipeVertexShader.shader")
-{}
+    , shader("./pipeVertexShader.shader", "./pipeFragmentShader.shader")
+{
+    std::cerr << "Created a pipe\n";
+}
 
 void Pipe::use_shader() {
     shader.bind();

@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+// to be removed
+#include <iostream>
+
 static void set_angle(Matrix4f &rotation_matrix, const float angle) {
     const float radians = angle * M_PI / 180.0f;
     const float sin = std::sin(radians);
@@ -18,6 +21,7 @@ Bird::Bird(const GLfloat *init_position_, const float init_angle)
     : Rectangle(init_position_)
     , shader("./birdVertexShader.shader", "./birdFragmentShader.shader")
 {
+    std::cerr << "Created a bird\n";
     // for (int i = 0; i < 8; ++i) {
     //     std::cout << "pos[" << i << "] = " << init_position_[i] << "\n";
     // }

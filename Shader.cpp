@@ -12,7 +12,7 @@ static std::string load_shader(const std::string &filepath) {
     std::string line;
 
     while (getline(stream, line)) {
-      ss << line << "\n";
+        ss << line << "\n";
     }
 
     return ss.str();
@@ -23,15 +23,15 @@ static GLuint compile_shader(GLenum shader_type, const std::string &source_code)
     const char *src = source_code.c_str();
     glShaderSource(shader_index, 1, &src, nullptr);
     glCompileShader(shader_index);
-    int compilation_result;
+    GLint compilation_result;
     glGetShaderiv(shader_index, GL_COMPILE_STATUS, &compilation_result);
     if (!compilation_result) {
-        int length;
+        GLint length;
         glGetShaderiv(shader_index, GL_INFO_LOG_LENGTH, &length);
-        char *error_message = new char[length + 1];
+        char *error_message = new char[length + 3];
 
         if (error_message != nullptr) {
-            glGetShaderInfoLog(shader_index, length, &length, error_message);
+            glGetShaderInfoLog(shader_index, length + 2, &length, error_message);
             error_message[length] = '\0';
             std::cerr << "Compilation failed: " << error_message << std::endl;
             delete [] error_message;
@@ -65,6 +65,23 @@ Shader::Shader(const std::string &vertex_shader_filepath = "",
         glAttachShader(shaderID, fragment_shader);
     }   
     glLinkProgram(shaderID);
+
+    GLint res;
+
+    glGetProgramiv(shaderID, GL_LINK_STATUS, &res);
+    if (res != GL_TRUE) {
+        std::cerr << "LINKING ERROR\n";
+        
+        glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &res);
+        if (res > 0) {
+            char *mess = new char[res + 3];
+            glGetProgramInfoLog(shaderID, res + 2, nullptr, mess);
+            mess[res] = '\0';
+            std::cerr << "Mess: " << mess << "\n\n";
+            delete [] mess;
+        }
+    }
+
     glValidateProgram(shaderID);    
     glDetachShader(shaderID, vertex_shader);
     glDetachShader(shaderID, fragment_shader);   
