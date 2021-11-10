@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Bird.h"
-
 namespace Game {
 
     void init();

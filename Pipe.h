@@ -5,10 +5,11 @@
 
 class Pipe : public Rectangle {
     private:
-        Shader shader;
+        // Shader shader;
     public:
         Pipe(const GLfloat *init_position_);
         ~Pipe() = default;
 
-        void use_shader();
+        // void use_shader();
+        void draw() override;
 };
