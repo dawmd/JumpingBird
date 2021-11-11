@@ -3,3 +3,6 @@
 !*.h
 !.gitignore
 !.CMakeLists.txt
+!src/*.cpp
+!src/
+!shaders/

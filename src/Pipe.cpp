@@ -5,7 +5,7 @@
 
 Pipe::Pipe(const GLfloat *init_position_)
     : Rectangle(init_position_)
-    , shader("./pipeVertexShader.shader", "./pipeFragmentShader.shader")
+    , shader("./shaders/pipeVertexShader.shader", "./shaders/pipeFragmentShader.shader")
 {
     std::cerr << "Created a pipe\n";
 }

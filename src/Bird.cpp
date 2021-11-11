@@ -19,7 +19,7 @@ static void set_angle(Matrix4f &rotation_matrix, const float angle) {
 
 Bird::Bird(const GLfloat *init_position_, const float init_angle)
     : Rectangle(init_position_)
-    , shader("./birdVertexShader.shader", "./birdFragmentShader.shader")
+    , shader("./shaders/birdVertexShader.shader", "./shaders/birdFragmentShader.shader")
 {
     std::cerr << "Created a bird\n";
     // for (int i = 0; i < 8; ++i) {

@@ -34,11 +34,20 @@ set(CMAKE_CXX_FLAGS "-DGLEW_NO_GLU -Wall -Wextra -O3")
 
 
 # source files
-# set(PROJECT_SOURCE_DIR src)
+set(SOURCE_FILES
+    src/main.cpp
+    src/Window.cpp
+    src/Matrix4f.cpp
+    src/Rectangle.cpp
+    src/Bird.cpp
+    src/Pipe.cpp
+    src/Shader.cpp
+    src/Game.cpp
+)
 
 
 # add the executable
-add_executable(JumpingBird main.cpp Window.cpp Matrix4f.cpp Rectangle.cpp Bird.cpp Shader.cpp Game.cpp Pipe.cpp)
+add_executable(JumpingBird ${SOURCE_FILES})
 
 
 # linking the libraries
