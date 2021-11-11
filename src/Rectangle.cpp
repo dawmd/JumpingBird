@@ -1,6 +1,10 @@
 #include "Rectangle.h"
 
+#include <cassert>
+
 Rectangle::Rectangle(const GLfloat *init_position_) {
+    assert(index_allocated);
+
     glGenVertexArrays(1, &vao_id);
     glBindVertexArray(vao_id);
     for (int i = 0; i < 2 * 4; ++i) {
@@ -19,6 +23,7 @@ Rectangle::Rectangle(const GLfloat *init_position_) {
 
 Rectangle::~Rectangle() {
     glDeleteBuffers(1, &rectangle_id);
+    glDeleteVertexArrays(1, &vao_id);
 }
 
 void Rectangle::update(const float dx, const float dy, const float dz) {

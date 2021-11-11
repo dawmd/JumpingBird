@@ -19,7 +19,7 @@ class Rectangle {
         Matrix4f position;
     public:
         Rectangle(const GLfloat *init_position_);
-        ~Rectangle();
+        virtual ~Rectangle();
 
         void update(const float dx, const float dy, const float dz);
     protected:

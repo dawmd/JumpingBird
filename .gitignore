@@ -6,3 +6,4 @@
 !.CMakeLists.txt
 !src/
 !shaders/
+!gameParameters.json

@@ -8,10 +8,7 @@
 
 #include <string>
 #include <vector>
-
-#include <iostream>
-
-
+#include <assert.h>
 
 static void init_positions(GLfloat *positions, const float width, const float height) {
     positions[0] = - width / 2.0f;
@@ -27,7 +24,9 @@ static void init_positions(GLfloat *positions, const float width, const float he
     positions[7] =   height / 2.0f;
 }
 
-
+static inline bool check_ptr(void *ptr) {
+    return ptr != nullptr;
+}
 
 namespace Game {
 
@@ -44,11 +43,20 @@ static struct {
     float bird_speed_down;
     float bird_rotation_left; // in degrees
     float bird_rotation_right; // in degrees
+    float bird_max_rotation; // in degrees
+    float bird_size; // the bird is a square whose side's lenght is equal to bird_size
 
     std::vector<char> jumping_keys;
 
     uint8_t pipe_pairs_number;
     float pipe_speed;
+    float pipe_width;
+
+    // A layer is how close to the player an object is (z coordinate)
+    // It has to be within the range [-1.0f, 1.0f]
+    float background_layer =  0.0f;
+    float pipe_layer       = -0.5f;
+    float bird_layer       = -1.0f;
 } GAME_PARAMETERS;
 
 struct PipePair {
@@ -101,9 +109,14 @@ static void init_parameteres() {
     GAME_PARAMETERS.bird_speed_down     = -0.25f;
     GAME_PARAMETERS.bird_rotation_left  =  0.5f;
     GAME_PARAMETERS.bird_rotation_right = -0.25f;
+    GAME_PARAMETERS.bird_max_rotation   =  30.0f;
+    GAME_PARAMETERS.bird_size           =  50.0f;
+
     GAME_PARAMETERS.jumping_keys = { 'W', ' ' };
+
     GAME_PARAMETERS.pipe_pairs_number = /* computing based on the window's size */ 1;
     GAME_PARAMETERS.pipe_speed        = -0.5f;
+    GAME_PARAMETERS.pipe_width        =  45.0f;
 }
 
     
@@ -123,13 +136,17 @@ void init() {
     Rectangle::init_indices();
     Rectangle::init_proj_matrix(GAME_PARAMETERS.window_width, GAME_PARAMETERS.window_height);
 
-    init_positions(bird_position, 200.0f, 200.0f);
+    init_positions(bird_position, GAME_PARAMETERS.bird_size, GAME_PARAMETERS.bird_size);
     bird = new Bird({ bird_position, 0.0f });
+    assert(check_ptr(bird));
+    bird->update(0.0f, 0.0f, GAME_PARAMETERS.bird_layer);
 
-    init_positions(pipe_position, 50.0f, GAME_PARAMETERS.window_height);
+    init_positions(pipe_position, GAME_PARAMETERS.pipe_width, GAME_PARAMETERS.window_height);
     pipe_pairs.resize(GAME_PARAMETERS.pipe_pairs_number);
     for (uint8_t i = 0; i < GAME_PARAMETERS.pipe_pairs_number; ++i) {
         pipe_pairs[i] = new PipePair(0.0f, pipe_position, 100.0f);
+        assert(check_ptr(pipe_pairs[i]));
+        pipe_pairs[i]->update(250.0f, 0.0f, GAME_PARAMETERS.pipe_layer);
     }
 }
 
@@ -152,19 +169,27 @@ void update() {
 
     if (jump) {
         bird->update(GAME_PARAMETERS.bird_speed_up, 0.0f, 0.0f);
-        bird->rotate(GAME_PARAMETERS.bird_rotation_right);
+        const float d_angle =
+            bird->get_angle() + GAME_PARAMETERS.bird_rotation_left > GAME_PARAMETERS.bird_max_rotation
+                ? GAME_PARAMETERS.bird_max_rotation - bird->get_angle()
+                : GAME_PARAMETERS.bird_rotation_left;
+        bird->rotate(d_angle);
     }
     else {
         bird->update(GAME_PARAMETERS.bird_speed_down, 0.0f, 0.0f);
-        bird->rotate(GAME_PARAMETERS.bird_rotation_left);
+        const float d_angle =
+            bird->get_angle() + GAME_PARAMETERS.bird_rotation_right < (-1.0f) * GAME_PARAMETERS.bird_max_rotation
+                ? (-1.0f) * GAME_PARAMETERS.bird_max_rotation - bird->get_angle()
+                : GAME_PARAMETERS.bird_rotation_right;
+        bird->rotate(d_angle);
     }
 }
 
 void draw() {
-    bird->draw();
     for (auto &pipe_pair : pipe_pairs) {
         pipe_pair->draw();
     }
+    bird->draw();
 }
 
 void clean_up() {

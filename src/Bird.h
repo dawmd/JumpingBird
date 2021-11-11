@@ -14,6 +14,7 @@ class Bird : public Rectangle {
         ~Bird() = default;
         
         void rotate(const float d_angle);
+        float get_angle();
         void use_shader();
         void draw() override;
 };

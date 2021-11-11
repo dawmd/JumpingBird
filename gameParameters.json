@@ -1,0 +1,19 @@
+{
+    "window_title": "Jumping Bird",
+    "window_height": 600,
+    "window_width": 1000,
+    "window_resizable": false,
+    "window_centered": true,
+    "bird_speed_up": 0.05,
+    "bird_speed_down": -0.25,
+    "bird_rotation_left": 0.5,
+    "bird_rotation_right": -0.25,
+    "bird_max_rotation": 30.0,
+    "bird_size": 50.0,
+    "jumping_keys": [
+        "W",
+        " "
+    ],
+    "pipe_speed": -0.5,
+    "pipe_width": 45.0
+}
