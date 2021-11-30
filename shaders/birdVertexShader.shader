@@ -7,5 +7,5 @@ uniform mat4 projMatr;
 uniform mat4 rotMatr;
 
 void main() {
-  gl_Position = projMatr * rotMatr * movement * position;
+  gl_Position = projMatr * movement * rotMatr * position;
 };

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+// to get rid of
 #include <GL/glew.h>
 
 #include "Window.h"
@@ -8,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdlib>
 #include <assert.h>
 
 static void init_positions(GLfloat *positions, const float width, const float height) {
@@ -26,6 +28,12 @@ static void init_positions(GLfloat *positions, const float width, const float he
 
 static inline bool check_ptr(void *ptr) {
     return ptr != nullptr;
+}
+
+/** Returns a pseudo-random double number from the range [left_limit, right_limit] */
+static inline double random_double(const double left_limit, const double right_limit) {
+    assert(left_limit <= right_limit);
+    return (static_cast<double>(std::rand()) / RAND_MAX) * (right_limit - left_limit) + left_limit;
 }
 
 namespace Game {
@@ -59,6 +67,7 @@ static struct {
     float bird_layer       = -1.0f;
 } GAME_PARAMETERS;
 
+
 struct PipePair {
     float center_point_height;
     Pipe upper_pipe;
@@ -75,9 +84,9 @@ struct PipePair {
     }
 
     void update(float dx, float dy, float dz) {
-            lower_pipe.update(dx, dy, dz);
-            upper_pipe.update(dx, dy, dz);
-        }
+        lower_pipe.update(dx, dy, dz);
+        upper_pipe.update(dx, dy, dz);
+    }
 
     void draw() {
         lower_pipe.draw();
@@ -105,8 +114,8 @@ static void init_parameteres() {
     GAME_PARAMETERS.centered      = true;
 
     // Game
-    GAME_PARAMETERS.bird_speed_up       =  0.5f;
-    GAME_PARAMETERS.bird_speed_down     = -0.25f;
+    GAME_PARAMETERS.bird_speed_up       =  1.0f;
+    GAME_PARAMETERS.bird_speed_down     = -0.55f;
     GAME_PARAMETERS.bird_rotation_left  =  0.5f;
     GAME_PARAMETERS.bird_rotation_right = -0.25f;
     GAME_PARAMETERS.bird_max_rotation   =  30.0f;
@@ -139,14 +148,14 @@ void init() {
     init_positions(bird_position, GAME_PARAMETERS.bird_size, GAME_PARAMETERS.bird_size);
     bird = new Bird({ bird_position, 0.0f });
     assert(check_ptr(bird));
-    bird->update(0.0f, 0.0f, GAME_PARAMETERS.bird_layer);
+    // bird->update(0.0f, 0.0f, GAME_PARAMETERS.bird_layer);
 
     init_positions(pipe_position, GAME_PARAMETERS.pipe_width, GAME_PARAMETERS.window_height);
     pipe_pairs.resize(GAME_PARAMETERS.pipe_pairs_number);
     for (uint8_t i = 0; i < GAME_PARAMETERS.pipe_pairs_number; ++i) {
         pipe_pairs[i] = new PipePair(0.0f, pipe_position, 100.0f);
         assert(check_ptr(pipe_pairs[i]));
-        pipe_pairs[i]->update(250.0f, 0.0f, GAME_PARAMETERS.pipe_layer);
+        // pipe_pairs[i]->update(250.0f, 0.0f, GAME_PARAMETERS.pipe_layer);
     }
 }
 
@@ -168,7 +177,7 @@ void update() {
     }
 
     if (jump) {
-        bird->update(GAME_PARAMETERS.bird_speed_up, 0.0f, 0.0f);
+        bird->update(0.0f, GAME_PARAMETERS.bird_speed_up, 0.0f);
         const float d_angle =
             bird->get_angle() + GAME_PARAMETERS.bird_rotation_left > GAME_PARAMETERS.bird_max_rotation
                 ? GAME_PARAMETERS.bird_max_rotation - bird->get_angle()
@@ -176,7 +185,7 @@ void update() {
         bird->rotate(d_angle);
     }
     else {
-        bird->update(GAME_PARAMETERS.bird_speed_down, 0.0f, 0.0f);
+        bird->update(0.0f, GAME_PARAMETERS.bird_speed_down, 0.0f);
         const float d_angle =
             bird->get_angle() + GAME_PARAMETERS.bird_rotation_right < (-1.0f) * GAME_PARAMETERS.bird_max_rotation
                 ? (-1.0f) * GAME_PARAMETERS.bird_max_rotation - bird->get_angle()
