@@ -16,3 +16,7 @@ void Pipe::draw() {
     use_shader();
     Rectangle::draw();
 }
+
+float Pipe::get_x_coord() const {
+    return position.get_element(0, 3);
+}

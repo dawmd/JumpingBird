@@ -14,7 +14,7 @@ class Matrix4f {
          * Returns the value of the element in the @p row_id row
          * and @p col_id column in the matrix
          */
-        inline float get_element(unsigned char row_id, unsigned char col_id) {
+        inline float get_element(unsigned char row_id, unsigned char col_id) const {
             return elements[4 * col_id + row_id];
         }
         /**

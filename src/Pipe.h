@@ -12,4 +12,5 @@ class Pipe : public Rectangle {
 
         void use_shader();
         void draw() override;
+        float get_x_coord() const;
 };

@@ -9,8 +9,9 @@
 
 #include <string>
 #include <vector>
+#include <array>
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 
 static void init_positions(GLfloat *positions, const float width, const float height) {
     positions[0] = - width / 2.0f;
@@ -39,6 +40,14 @@ static inline double random_double(const double left_limit, const double right_l
 namespace Game {
 
 
+/*************************
+ * 
+ * Auxiliary structures
+ * and functions
+ * 
+ ************************/
+
+
 // TODO: add default values
 static struct {
     std::string window_title;
@@ -58,13 +67,16 @@ static struct {
 
     uint8_t pipe_pairs_number;
     float pipe_speed;
-    float pipe_width;
+    uint16_t pipe_width;
 
     // A layer is how close to the player an object is (z coordinate)
     // It has to be within the range [-1.0f, 1.0f]
-    float background_layer =  0.0f;
-    float pipe_layer       = -0.5f;
-    float bird_layer       = -1.0f;
+    float background_layer    =  0.0f;
+    float pipe_layer          = -0.5f;
+    float bird_layer          = -1.0f;
+    float pipe_hole_ratio     =  2.5f;
+    uint16_t pipe_break       =  250; // the break between consecutive pipes
+    uint16_t starting_x_point;
 } GAME_PARAMETERS;
 
 
@@ -73,12 +85,12 @@ struct PipePair {
     Pipe upper_pipe;
     Pipe lower_pipe;
 
-    PipePair(float center_point_height_, GLfloat *positions, float pipe_hole_size)
+    PipePair(float center_point_height_, GLfloat *positions)
         : center_point_height(center_point_height_)
         , upper_pipe(positions)
         , lower_pipe(positions)
     {
-        const float d_elevation = (static_cast<float>(GAME_PARAMETERS.window_height) + pipe_hole_size) / 2.0f;
+        const float d_elevation = (static_cast<float>(GAME_PARAMETERS.window_height) + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size) / 2.0f;
         upper_pipe.update(0.0f, d_elevation, 0.0f);
         lower_pipe.update(0.0f, (-1.0f) * d_elevation, 0.0f);
     }
@@ -91,6 +103,22 @@ struct PipePair {
     void draw() {
         lower_pipe.draw();
         upper_pipe.draw();
+    }
+
+    void get_border(std::array<float, 8> &result) const {
+        const float centre_x = lower_pipe.get_x_coord();
+        float left_x = centre_x - GAME_PARAMETERS.pipe_width / 2;
+        float right_x = centre_x + GAME_PARAMETERS.pipe_width / 2;
+
+        // Order of the coords:
+        // down-left corner, down-right corner, top-right corner, top-left corner
+        // OF THE HOLE between the pipes
+        result = {
+            left_x,  center_point_height - GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
+            right_x, center_point_height - GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
+            right_x, center_point_height + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
+            left_x,  center_point_height + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size
+        };
     }
 };
 
@@ -123,11 +151,38 @@ static void init_parameteres() {
 
     GAME_PARAMETERS.jumping_keys = { 'W', ' ' };
 
-    GAME_PARAMETERS.pipe_pairs_number = /* computing based on the window's size */ 1;
     GAME_PARAMETERS.pipe_speed        = -0.5f;
-    GAME_PARAMETERS.pipe_width        =  45.0f;
+    GAME_PARAMETERS.pipe_width        =  60;
+    GAME_PARAMETERS.pipe_hole_ratio   =  2.5f;
+    GAME_PARAMETERS.pipe_break        =  250;
+    GAME_PARAMETERS.starting_x_point  =  GAME_PARAMETERS.window_width / 2;
+    GAME_PARAMETERS.pipe_pairs_number =
+        GAME_PARAMETERS.window_width / (GAME_PARAMETERS.pipe_width + GAME_PARAMETERS.pipe_break) + 2;
 }
 
+
+/*************************
+ * 
+ * Actual functionality
+ * 
+ ************************/
+
+
+static double get_random_y_coord_of_pipes() {
+    const double half_height = GAME_PARAMETERS.window_height / 2;
+    return random_double(-half_height, half_height) * 0.7;
+}
+
+static void init_pipes() {
+    const uint16_t total_x_movement = GAME_PARAMETERS.pipe_width + GAME_PARAMETERS.pipe_break;
+    for (int i = 0; i < GAME_PARAMETERS.pipe_pairs_number; ++i) {
+        pipe_pairs[i] = new PipePair(
+            0.0f,
+            pipe_position
+        );
+        pipe_pairs[i]->update(GAME_PARAMETERS.starting_x_point + total_x_movement * i, get_random_y_coord_of_pipes(), 0.0f);
+    }
+}
     
 void init() {
     init_parameteres();
@@ -148,15 +203,10 @@ void init() {
     init_positions(bird_position, GAME_PARAMETERS.bird_size, GAME_PARAMETERS.bird_size);
     bird = new Bird({ bird_position, 0.0f });
     assert(check_ptr(bird));
-    // bird->update(0.0f, 0.0f, GAME_PARAMETERS.bird_layer);
 
     init_positions(pipe_position, GAME_PARAMETERS.pipe_width, GAME_PARAMETERS.window_height);
     pipe_pairs.resize(GAME_PARAMETERS.pipe_pairs_number);
-    for (uint8_t i = 0; i < GAME_PARAMETERS.pipe_pairs_number; ++i) {
-        pipe_pairs[i] = new PipePair(0.0f, pipe_position, 100.0f);
-        assert(check_ptr(pipe_pairs[i]));
-        // pipe_pairs[i]->update(250.0f, 0.0f, GAME_PARAMETERS.pipe_layer);
-    }
+    init_pipes();
 }
 
 bool is_ongoing() {

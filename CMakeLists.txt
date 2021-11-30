@@ -30,7 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 # flags for compiling the files
-set(CMAKE_CXX_FLAGS "-DGLEW_NO_GLU -Wall -Wextra -O3")
+set(CMAKE_CXX_FLAGS "-DGLEW_NO_GLU -Wall -Wextra -Wshadow -pedantic -O3")
 
 
 # source files

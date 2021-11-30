@@ -4,6 +4,8 @@
 #include "Shader.h"
 #include "Matrix4f.h"
 
+#include <array>
+
 class Bird : public Rectangle {
     private:
         float angle;
@@ -17,4 +19,5 @@ class Bird : public Rectangle {
         float get_angle();
         void use_shader();
         void draw() override;
+        void get_coordinates(std::array<float, 8> &result) const;
 };

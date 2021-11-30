@@ -44,3 +44,18 @@ void Bird::draw() {
     use_shader();
     Rectangle::draw();
 }
+
+void Bird::get_coordinates(std::array<float, 8> &result) const {
+    Matrix4f mapping_matrix = Rectangle::projection_matrix * position * rotation_matrix;
+    // (x_1, y_1), (x_2, y_2), (x_3, y_3), (x_4, y_4)
+    // down-left corner, down-right corner, top-right corner. top-left corner
+    // (when looking at the original state of the rectangle, without rotations)
+
+    for (int i = 0; i < 4; ++i) {
+        result[2 * i] = init_position[2 * i] * mapping_matrix.get_element(0, 0)
+                        + init_position[2 * i + 1] * mapping_matrix.get_element(0, 1);
+
+        result[2 * i + 1] = init_position[2 * i] * mapping_matrix.get_element(1, 0)
+                          + init_position[2 * i + 1] * mapping_matrix.get_element(1, 1);
+    }
+}
