@@ -1,6 +1,6 @@
 #include "Game.h"
 
-// to get rid of
+// to get rid of (I'm going to use functors instead)
 #include <GL/glew.h>
 
 #include "Window.h"
@@ -12,6 +12,11 @@
 #include <array>
 #include <cstdlib>
 #include <cassert>
+
+// For error messages
+#include <iostream>
+// For tangens
+#include <cmath>
 
 static void init_positions(GLfloat *positions, const float width, const float height) {
     positions[0] = - width / 2.0f;
@@ -27,9 +32,9 @@ static void init_positions(GLfloat *positions, const float width, const float he
     positions[7] =   height / 2.0f;
 }
 
-static inline bool check_ptr(void *ptr) {
-    return ptr != nullptr;
-}
+// static inline bool check_ptr(void *ptr) {
+//     return ptr != nullptr;
+// }
 
 /** Returns a pseudo-random double number from the range [left_limit, right_limit] */
 static inline double random_double(const double left_limit, const double right_limit) {
@@ -39,6 +44,10 @@ static inline double random_double(const double left_limit, const double right_l
 
 namespace Game {
 
+
+static bool continue_game = true;
+static int leftmost_pipe_index = 0;
+static int center_pipe_index = 0;
 
 /*************************
  * 
@@ -105,20 +114,25 @@ struct PipePair {
         upper_pipe.draw();
     }
 
-    void get_border(std::array<float, 8> &result) const {
-        const float centre_x = lower_pipe.get_x_coord();
-        float left_x = centre_x - GAME_PARAMETERS.pipe_width / 2;
-        float right_x = centre_x + GAME_PARAMETERS.pipe_width / 2;
+    // std::pair<float, float> get_border() const {
+    //     return std::pair<float, float>(
+    //             lower_pipe.get_x_coord() - GAME_PARAMETERS.pipe_width / 2,
+    //             center_point_height - GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size
+    //         );
+    // }
 
-        // Order of the coords:
-        // down-left corner, down-right corner, top-right corner, top-left corner
-        // OF THE HOLE between the pipes
-        result = {
-            left_x,  center_point_height - GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
-            right_x, center_point_height - GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
-            right_x, center_point_height + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size,
-            left_x,  center_point_height + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size
-        };
+    float get_x_coord() const {
+        return upper_pipe.get_x_coord();
+    }
+
+    void reset() {
+        upper_pipe.update(-upper_pipe.get_x_coord(), -upper_pipe.get_y_coord(), 0.0f);
+        lower_pipe.update(-lower_pipe.get_x_coord(), -lower_pipe.get_y_coord(), 0.0f);
+
+        const float d_elevation = (static_cast<float>(GAME_PARAMETERS.window_height) + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size) / 2.0f;
+
+        upper_pipe.update(0.0f, d_elevation, 0.0f);
+        lower_pipe.update(0.0f, (-1.0f) * d_elevation, 0.0f);
     }
 };
 
@@ -142,8 +156,8 @@ static void init_parameteres() {
     GAME_PARAMETERS.centered      = true;
 
     // Game
-    GAME_PARAMETERS.bird_speed_up       =  1.0f;
-    GAME_PARAMETERS.bird_speed_down     = -0.55f;
+    GAME_PARAMETERS.bird_speed_up       =  1.2f;
+    GAME_PARAMETERS.bird_speed_down     = -0.7f;
     GAME_PARAMETERS.bird_rotation_left  =  0.5f;
     GAME_PARAMETERS.bird_rotation_right = -0.25f;
     GAME_PARAMETERS.bird_max_rotation   =  30.0f;
@@ -151,13 +165,13 @@ static void init_parameteres() {
 
     GAME_PARAMETERS.jumping_keys = { 'W', ' ' };
 
-    GAME_PARAMETERS.pipe_speed        = -0.5f;
+    GAME_PARAMETERS.pipe_speed        = -1.5f;
     GAME_PARAMETERS.pipe_width        =  60;
     GAME_PARAMETERS.pipe_hole_ratio   =  2.5f;
     GAME_PARAMETERS.pipe_break        =  250;
     GAME_PARAMETERS.starting_x_point  =  GAME_PARAMETERS.window_width / 2;
     GAME_PARAMETERS.pipe_pairs_number =
-        GAME_PARAMETERS.window_width / (GAME_PARAMETERS.pipe_width + GAME_PARAMETERS.pipe_break) + 2;
+        GAME_PARAMETERS.window_width / (GAME_PARAMETERS.pipe_width + GAME_PARAMETERS.pipe_break) + 3;
 }
 
 
@@ -180,6 +194,10 @@ static void init_pipes() {
             0.0f,
             pipe_position
         );
+        if (!pipe_pairs[i]) {
+            std::cerr << "An attempt to allocate memory has failed" << std::endl;
+            std::exit(1);
+        }
         pipe_pairs[i]->update(GAME_PARAMETERS.starting_x_point + total_x_movement * i, get_random_y_coord_of_pipes(), 0.0f);
     }
 }
@@ -201,8 +219,11 @@ void init() {
     Rectangle::init_proj_matrix(GAME_PARAMETERS.window_width, GAME_PARAMETERS.window_height);
 
     init_positions(bird_position, GAME_PARAMETERS.bird_size, GAME_PARAMETERS.bird_size);
-    bird = new Bird({ bird_position, 0.0f });
-    assert(check_ptr(bird));
+    bird = new Bird(bird_position, 0.0f);
+    if (!bird) {
+        std::cerr << "An attempt to allocate memory has failed" << std::endl;
+        std::exit(1);
+    }
 
     init_positions(pipe_position, GAME_PARAMETERS.pipe_width, GAME_PARAMETERS.window_height);
     pipe_pairs.resize(GAME_PARAMETERS.pipe_pairs_number);
@@ -213,10 +234,53 @@ bool is_ongoing() {
     return Window::open();
 }
 
-void update() {
+// // x1 < x2
+// static void get_line(float x1, float y1, float x2, float y2) {
+//     const float a = std::tan((y2 - y1) / (x2 - x1));
+//     const float b = (y1 * x2 - x1 * y2) / (x2 - x1);
+
+//     // y = ax + b
+// }
+
+    // static bool check_collisions() {
+    //     // down-left corner of the "hole" between the pipes
+    //     const std::pair<float, float> pipe_border = pipe_pairs[center_pipe_index]->get_border();
+    //     const std::array<float, 4> hole_coords = {
+    //         pipe_border.first, pipe_border.first + GAME_PARAMETERS.pipe_width,
+    //         pipe_border.second, pipe_border.second + GAME_PARAMETERS.pipe_hole_ratio * GAME_PARAMETERS.bird_size
+    //     };
+
+
+    // }
+
+static void update_pipes() {
     for (auto &pipe_pair : pipe_pairs) {
         pipe_pair->update(GAME_PARAMETERS.pipe_speed, 0.0f, 0.0f);
     }
+
+    if (pipe_pairs[leftmost_pipe_index]->get_x_coord() < -(GAME_PARAMETERS.window_width + GAME_PARAMETERS.pipe_width)) {
+        const int last_pipe_index = (leftmost_pipe_index + GAME_PARAMETERS.pipe_pairs_number - 1) % GAME_PARAMETERS.pipe_pairs_number;
+        const float new_position = pipe_pairs[last_pipe_index]->get_x_coord() + GAME_PARAMETERS.pipe_break + GAME_PARAMETERS.pipe_width;
+        pipe_pairs[leftmost_pipe_index]->reset();
+        pipe_pairs[leftmost_pipe_index]->update(new_position, get_random_y_coord_of_pipes(), 0.0f);
+        leftmost_pipe_index = (leftmost_pipe_index + 1) % GAME_PARAMETERS.pipe_pairs_number;
+    }
+
+    if (pipe_pairs[center_pipe_index]->get_x_coord() < -GAME_PARAMETERS.pipe_width / 2) {
+        center_pipe_index = (center_pipe_index + 1) % GAME_PARAMETERS.pipe_pairs_number;
+    }
+
+    // if (check_collisions()) {
+    //     continue_game = false;
+    // }
+}
+
+void update() {
+    if (!continue_game) {
+        return;
+    }
+
+    update_pipes();
 
     bool jump = false;
     for (char key : GAME_PARAMETERS.jumping_keys) {

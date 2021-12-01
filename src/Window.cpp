@@ -3,6 +3,13 @@
 #include <iostream>
 
 void Window::init(const std::string &title, uint16_t height, uint16_t width, bool centralised, bool resizable) {
+    static bool initialized = false;
+
+    if (initialized) {
+        std::cerr << "Attempted to initilize the window twice" << std::endl;
+        return;
+    }
+
     if (window) {
         std::cerr << "ERROR. Multiple windows are not accepted." << std::endl;
         return;
@@ -47,6 +54,8 @@ void Window::init(const std::string &title, uint16_t height, uint16_t width, boo
     glfwShowWindow(window);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
+
+    initialized = true;
 }
 
 void Window::remove() {

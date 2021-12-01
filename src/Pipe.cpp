@@ -20,3 +20,7 @@ void Pipe::draw() {
 float Pipe::get_x_coord() const {
     return position.get_element(0, 3);
 }
+
+float Pipe::get_y_coord() const {
+    return position.get_element(1, 3);
+}
