@@ -20,4 +20,5 @@ The last four can be easily installed on Linux running `sudo apt-get install X` 
 * Adding textures,
 * Adding an end-game screen,
 * Making a better interface for setting up the window's size,
-* Displaying points.
+* Displaying points in the game,
+* Keeping the settings in a JSON file instead of asking the user to give them every time they run the game or using default ones.
